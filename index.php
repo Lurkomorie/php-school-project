@@ -7,6 +7,16 @@
     <title>Document</title>
 </head>
 <body>
+    <?php
+       
+       /*
+       $db = new SQlite3('user-store.db'); 
+
+        $results = $db->query('SELECT * FROM User');
+        $results = $results->fetchArray(SQLITE3_ASSOC);
+        */
+
     
+        ?>
 </body>
 </html>
