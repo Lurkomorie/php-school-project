@@ -1,6 +1,7 @@
 <?php
 header('Content-Type: application/json; charset=utf-8');
 $db = new SQlite3('user-store.db');
+$db -> enableExceptions(false);
 $errormsg = ['status' => 'error',
              'message' => ''];
 $request = $_GET["q"];
@@ -28,24 +29,38 @@ function result($result, $error){
 }
 
 switch ($request) {
+    
     case "searchI":
-        $results = $db -> query('SELECT * FROM Interest WHERE description="'. $_GET["p"].'"');
-        result($results, "Empty");
+    //works
+        if($stmt = $db -> prepare('SELECT * FROM Interest WHERE description="'. $_GET["p"].'"')){
+            $resultQ = @$stmt -> execute();
+            @result($resultQ, "Empty");
+        }
+        else{
+            $errormsg['message']='Error';
+            print_r(json_encode($errormsg));
+        }
     break;
     
     case "newI":
-        $results = $db -> query('INSERT INTO Interest VALUES(NULL,"'. $_GET["p"]. '")');
-        result($results,"Cannot create");
+    //works
+        if($stmt = $db -> prepare('INSERT INTO Interest VALUES(NULL,"'. $_GET["p"]. '")')){
+            $resultQ = @$stmt -> execute();
+            @result($resultQ, "Empty");
+        }
+        else{
+            $errormsg['message']='Error';
+            print_r(json_encode($errormsg));
+        }
     break;
 
     case "updateI":
-        $result = $db -> query('UPDATE Interest SET description="' . $_GET["p"] . '" WHERE id=' . $_GET["id"]);
-        if($result){
-            print_r("TRUE");
-            return true;
+        if($stmt = $db -> prepare('UPDATE Interest SET description="' . $_GET["p"] . '" WHERE id=' . $_GET["id"])){
+            $resultQ = @$stmt -> execute();
+            @result($resultQ, "Empty");
         }
-        else {
-            $errormsg['message']="Error Inserting";
+        else{
+            $errormsg['message']='Error';
             print_r(json_encode($errormsg));
         }
     break;   
