@@ -1,11 +1,17 @@
 <?php
 header('Content-Type: application/json; charset=utf-8');
 $db = new SQlite3('user-store.db');
-$db -> enableExceptions(false);
-$errormsg = ['status' => 'error',
-             'message' => ''];
 $request = $_GET["q"];
+$db -> enableExceptions(true);
 
+//prints error
+function printErr($message){
+    print_r(json_encode(
+        ['status' => 'error',
+         'message' => $message]));
+}
+
+//prints result
 function result($result, $error){
     if($result != false){
     $finalResult = [];
@@ -17,39 +23,54 @@ function result($result, $error){
             print_r($row);
         }
     } else {
-        $errormsg['message']=$error;
-        print_r(json_encode($errormsg));
+        printErr($error);
     }
-    }
-    else {
-        $errormsg['message']='Error';
-        print_r(json_encode($errormsg));
-    }
-
 }
+}
+
+//catches errors + prints by result function
+function catchErr($stmt){
+    try{
+        $result = $stmt -> execute();
+        result($result, "No result");
+    }
+    catch(Exception $e){
+        printErr($e->getMessage());
+    }
+}
+
+//prints last inserted row from table
+$printLastRow = function ($tableName) use ($db) {
+    if($stmt = $db -> prepare('SELECT * FROM ' . $tableName . ' WHERE id=:p')) {
+        $stmt->bindValue(':p', 5);
+        catchErr($stmt);
+    }
+};
 
 switch ($request) {
     
     case "searchI":
     //works
-        if($stmt = $db -> prepare('SELECT * FROM Interest WHERE description="'. $_GET["p"].'"')){
-            $resultQ = @$stmt -> execute();
-            @result($resultQ, "Empty");
+        $param = "%{$_GET["p"]}%";
+        if($stmt = $db -> prepare('SELECT * FROM Interest WHERE description LIKE :p')) {
+            $stmt->bindValue(':p', $param);
+            catchErr($stmt);
         }
         else{
-            $errormsg['message']='Error';
-            print_r(json_encode($errormsg));
+            printErr("Error");
         }
     break;
     
     case "newI":
     //works
-        if($stmt = $db -> prepare('INSERT INTO Interest VALUES(NULL,"'. $_GET["p"]. '")')){
-            $resultQ = @$stmt -> execute();
-            @result($resultQ, "Empty");
+        $param = "{$_GET["p"]}";
+        if($stmt = $db -> prepare('INSERT INTO Interest VALUES(NULL,:p)')){
+            $stmt->bindValue(':p', $param);
+            catchErr($stmt);
+            $printLastRow('Interest');
         }
         else{
-            $errormsg['message']='Error';
+            $errormsg['message']='Error1';
             print_r(json_encode($errormsg));
         }
     break;
