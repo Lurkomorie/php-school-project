@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css?family=Oswald|Playfair+Display&subset=cyrillic');
+
+body{
+    background-color: #E1E1E1;
+}
+
+.homepage{ 
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 130px;
+}
+
+.myNavbar{ 
+    margin-bottom: 2%;
+}
