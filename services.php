@@ -30,8 +30,16 @@ function result($result, $error){
 }
 }
 
-//catches errors + prints by result function
-//gets sqlite request and boolean if result needs to show
+/**
+ * cbatches errors + prints by result function
+ * 
+ * @params
+ * $stmt -  database connection
+ * $die - boolean - TRUE if we need to kill the programmer before
+ * 
+ * @returns
+ *   TRUE/FALSE
+ **/
 function catchErr($stmt, $die){
     try{
         $result = $stmt -> execute();
@@ -56,7 +64,9 @@ $printLastRow = function ($tableName) use ($db) {
     }
 };
 
-$printLastRowWithId = function ($tableName, $id) use ($db) {
+//prints last row from table
+//gets tableName and id
+$printRowWithId = function ($tableName, $id) use ($db) {
     if($stmt = $db -> prepare('SELECT * FROM ' . $tableName . ' WHERE id=:p')) {
         $stmt->bindValue(':p', $id);
         if(catchErr($stmt, true))
@@ -102,7 +112,7 @@ switch ($request) {
             $stmt->bindValue(':p', $param);
             $stmt->bindValue(':id', $id);
             if(catchErr($stmt, false)){
-                $printLastRowWithId('Interest', $id);
+                $printRowWithId('Interest', $id);
             }
         }
         else{
@@ -116,7 +126,7 @@ switch ($request) {
         $param = "{$_GET["p"]}";
         if($stmt = $db -> prepare('DELETE FROM Interest WHERE id=:p')){
             $stmt->bindValue(':p', $param);
-            if($printLastRowWithId('Interest', $param))
+            if($printRowWithId('Interest', $param))
                 {
                     catchErr($stmt, false);
                 }
@@ -140,6 +150,8 @@ switch ($request) {
     break;
 
 
+
+    //works
     case "viewSingleP": 
         $param = "{$_GET["p"]}";
         if($stmt = $db -> prepare('SELECT * FROM Person WHERE id=:p')) {
@@ -151,40 +163,84 @@ switch ($request) {
         }
     break;
     
-    case "viewAllU": 
-        $results = $db -> query('SELECT * FROM Person');
-        $finalResult = [];
-        while ($row = $results -> fetchArray(SQLITE3_ASSOC)) {
-            $finalResult[] = json_encode($row,JSON_UNESCAPED_UNICODE);
+    //works
+    case "viewAllP": 
+        if($stmt = $db -> prepare('SELECT * FROM Person')) {
+            catchErr($stmt, true);
         }
-        if (!empty($finalResult)) {
-            foreach($finalResult as $row) {
-                print_r($row);
-            }
-        } else {
-            $errormsg['message']="Empty";
-            print_r(json_encode($errormsg));
+        else{
+        printErr("Error");
         }
     break;
     
-    case "newU":
-        $statement = $db->prepare('INSERT INTO Person(firstName, lastName, phone, active, age) VALUES(:firstName, :lastName, :phone, :active, :age)');
-        if($statement){
-            $statement->bindValue(':firstName', $_GET['fname']);
-            $statement->bindValue(':lastName', $_GET['lname']);
-            $statement->bindValue(':phone', $_GET['phone']);
-            $statement->bindValue(':active', $_GET['active']);
-            $statement->bindValue(':age', $_GET['age']);
-            $result = $statement->execute();
+    //works
+    case "newP":
+        $firstName = "{$_GET["firstName"]}";
+        $lastName = "{$_GET["lastName"]}";
+        $phone = "{$_GET["phone"]}";
+        $active = "{$_GET["active"]}";
+        $age = "{$_GET["age"]}";
+
+        if($stmt = $db->prepare('INSERT INTO Person(firstName, lastName, phone, active, age) VALUES(:firstName, :lastName, :phone, :active, :age)')){
+        $stmt->bindValue(':firstName', $firstName);
+        $stmt->bindValue(':lastName', $lastName);
+        $stmt->bindValue(':phone', $phone);
+        $stmt->bindValue(':active', $active);
+        $stmt->bindValue(':age', $age);
+            if(catchErr($stmt, false)){
+                $printLastRow('Person');
             }
-        if($result){
-            print_r("TRUE");
-            return true;
         }
-        else {
-            $errormsg['message']="Error Inserting";
+        else{
+            $errormsg['message']='Error';
+            print_r(json_encode($errormsg));
+        } 
+    break;
+
+    //works
+    case "deleteP":
+        $id = "{$_GET["p"]}";
+        if($stmt = $db -> prepare('DELETE FROM Person WHERE id=:p')){
+            $stmt->bindValue(':p', $id);
+            if($printRowWithId('Person', $id))
+                {
+                    catchErr($stmt, false);
+                }
+        }
+        else{
+            $errormsg['message']='Error';
             print_r(json_encode($errormsg));
         }
+    break;
+
+    //works
+    case "editP":
+        $id = "{$_GET["p"]}";
+        $firstName = "{$_GET["firstName"]}";
+        $lastName = "{$_GET["lastName"]}";
+        $phone = "{$_GET["phone"]}";
+        $active = "{$_GET["active"]}";
+        $age = "{$_GET["age"]}";
+
+        if($stmt = $db->prepare('UPDATE Person SET firstName=:firstName, lastName=:lastName, phone=:phone, active=:active, age=:age WHERE id=:id')){
+        $stmt->bindValue(':id', $id);
+        $stmt->bindValue(':firstName', $firstName);
+        $stmt->bindValue(':lastName', $lastName);
+        $stmt->bindValue(':phone', $phone);
+        $stmt->bindValue(':active', $active);
+        $stmt->bindValue(':age', $age);
+            if(catchErr($stmt, false)){
+                $printRowWithId('Person', $id);
+            }
+        }
+        else{
+            $errormsg['message']='Error';
+            print_r(json_encode($errormsg));
+        } 
+    break;
+
+    case "searchP":
+        $param = "{$_GET"
     break;
 
 }
