@@ -75,6 +75,58 @@ $printRowWithId = function ($tableName, $id) use ($db) {
     }
 };
 
+$findInterestId = function ($p) use ($db){
+    if($stmt = $db -> prepare('SELECT id FROM Interest WHERE description LIKE :p')) {
+        $stmt->bindValue(':p', $p);
+        $result = $stmt->execute();
+        $finalResult = [];
+        if($result != false){
+        while ($row = $result -> fetchArray(SQLITE3_ASSOC)) {
+            $finalResult[] = $row;
+        }
+        return $finalResult;
+    }
+        else return false;
+
+    }
+    else{
+        printErr("Error");
+    }
+};
+
+function countRowsInTable($tableName){
+    if($stmt = $db -> prepare('SELECT COUNT(*) FROM :p')) {
+        $stmt->bindValue(':p', $tableName);
+        $result = $stmt->execute();
+        while ($row = $result -> fetchArray(SQLITE3_ASSOC)) {
+            return $row;
+        }
+    }
+    else{
+        printErr("Error");
+    }
+}
+
+$findPersonsIdByInterestId = function ($p) use ($db){
+    $perArr = [];
+    $interestsId = $findInterestId($p); 
+    if($interestsId!=false){
+    for($i = 0; $i <= count($interestsId); $i++){
+    if($stmt = $db -> prepare('SELECT personId FROM Person_Interests WHERE InterestId=:p')) {
+        $stmt->bindValue(':p', $interestsId[i]);
+        $result = $stmt->execute();
+        $perArr[i] = $result;
+    }
+    else{
+        printErr("Error");
+    }
+    return $perArr;
+    }
+}
+};
+
+
+
 switch ($request) {
     
     case "searchI":
@@ -99,8 +151,7 @@ switch ($request) {
             }
         }
         else{
-            $errormsg['message']='Error';
-            print_r(json_encode($errormsg));
+            printErr("Error");
         }
     break;
 
@@ -116,8 +167,7 @@ switch ($request) {
             }
         }
         else{
-            $errormsg['message']='Error';
-            print_r(json_encode($errormsg));
+            printErr("Error");
         }
     break;   
     
@@ -132,8 +182,7 @@ switch ($request) {
                 }
         }
         else{
-            $errormsg['message']='Error';
-            print_r(json_encode($errormsg));
+            printErr("Error");
         }
     break;
 
@@ -192,8 +241,7 @@ switch ($request) {
             }
         }
         else{
-            $errormsg['message']='Error';
-            print_r(json_encode($errormsg));
+            printErr("Error");
         } 
     break;
 
@@ -208,8 +256,7 @@ switch ($request) {
                 }
         }
         else{
-            $errormsg['message']='Error';
-            print_r(json_encode($errormsg));
+            printErr("Error");
         }
     break;
 
@@ -234,13 +281,25 @@ switch ($request) {
             }
         }
         else{
-            $errormsg['message']='Error';
-            print_r(json_encode($errormsg));
+            printErr("Error");
         } 
     break;
 
     case "searchP":
-        $param = "{$_GET"
+        $param = "{$_GET["p"]}";
+        if($stmt = $db->prepare('SELECT * FROM Person WHERE (firstName like :firstName OR lastName like :lastName OR phone like :phone)')){
+            $stmt->bindValue(':firstName', $param);
+            $stmt->bindValue(':lastName', $param);
+            $stmt->bindValue(':phone', $param);
+            catchErr($stmt, true);
+        }
+        else{
+            printErr("Error");
+        } 
+        for($i = 0; $i <= count($findInterestId($param)); $i++){
+            $perArr = $findPersonsIdByInterestId($param);
+            result($perArr[i], "Empty");
+        }
     break;
 
 }
