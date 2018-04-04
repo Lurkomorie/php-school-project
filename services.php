@@ -3,26 +3,41 @@ header('Content-Type: application/json; charset=utf-8');
 $db = new SQlite3('user-store.db');
 $request = $_GET["q"];
 $db -> enableExceptions(true);
+$resultA = array();
+
+function getResult(){
+    global $resultA;
+    echo json_encode($resultA,JSON_UNESCAPED_UNICODE);
+}
+
+function goback()
+{
+    header("Location: {$_SERVER['HTTP_REFERER']}");
+    exit;
+}
 
 //prints error
 //gets error message
 function printErr($message){
-    print_r(json_encode(
+    global $resultA;
+    $row = (
         ['status' => 'error',
-         'message' => $message]));
+         'message' => $message]);
+    $resultA[] = $row;            
 }
 
 //prints result
 //gets result from sql request and error message
 function result($result, $error){
+    global $resultA;
     if($result != false){
-    $finalResult = [];
+        $finalResult = [];
     while ($row = $result -> fetchArray(SQLITE3_ASSOC)) {
-        $finalResult[] = json_encode($row,JSON_UNESCAPED_UNICODE);
+        $finalResult[] = $row;
     }
     if (!empty($finalResult)) {
         foreach($finalResult as $row) {
-            print_r($row);
+            $resultA[] = $row;
         }
     } else {
         printErr($error);
@@ -75,24 +90,55 @@ $printRowWithId = function ($tableName, $id) use ($db) {
     }
 };
 
-$findInterestId = function ($p) use ($db){
+function findInterestId($p, $db){
     if($stmt = $db -> prepare('SELECT id FROM Interest WHERE description LIKE :p')) {
         $stmt->bindValue(':p', $p);
         $result = $stmt->execute();
         $finalResult = [];
         if($result != false){
-        while ($row = $result -> fetchArray(SQLITE3_ASSOC)) {
+        while ($row = $result -> fetchArray(SQLITE3_NUM)) {
             $finalResult[] = $row;
         }
         return $finalResult;
     }
         else return false;
-
-    }
+}
     else{
         printErr("Error");
     }
 };
+
+function findPersonsIdByInterestId ($p,$db){
+    $perArr = [];
+    $interestsId = findInterestId($p, $db); 
+    if($interestsId!=false){
+    for($i = 0; $i < count($interestsId); $i++){
+    if($stmt = $db -> prepare('SELECT personId FROM Person_Interests WHERE interestId=:p')) {
+        $temp = $interestsId[$i];
+        $pp = $temp[0];
+        $stmt->bindValue(':p', $pp);    
+        $result = $stmt->execute();  
+        while ($row = $result -> fetchArray(SQLITE3_NUM)) {
+            $perArr[] = $row;
+        }
+    }
+    else{
+        printErr("Error");
+    }
+    return $perArr;
+    }
+}
+};
+
+function findPersonsById($arr,$db){
+    for($i = 0; $i < count($arr); $i++){
+        if($stmt = $db -> prepare('SELECT * FROM Person WHERE id=:p')) {
+            $index = $arr[$i];
+            $stmt -> bindValue(':p',$index[0]);
+            catchErr($stmt, true);
+    }
+}
+}
 
 function countRowsInTable($tableName){
     if($stmt = $db -> prepare('SELECT COUNT(*) FROM :p')) {
@@ -106,24 +152,6 @@ function countRowsInTable($tableName){
         printErr("Error");
     }
 }
-
-$findPersonsIdByInterestId = function ($p) use ($db){
-    $perArr = [];
-    $interestsId = $findInterestId($p); 
-    if($interestsId!=false){
-    for($i = 0; $i <= count($interestsId); $i++){
-    if($stmt = $db -> prepare('SELECT personId FROM Person_Interests WHERE InterestId=:p')) {
-        $stmt->bindValue(':p', $interestsId[i]);
-        $result = $stmt->execute();
-        $perArr[i] = $result;
-    }
-    else{
-        printErr("Error");
-    }
-    return $perArr;
-    }
-}
-};
 
 
 
@@ -201,7 +229,8 @@ switch ($request) {
 
 
     //works
-    case "viewSingleP": 
+    case "v
+    iewSingleP": 
         $param = "{$_GET["p"]}";
         if($stmt = $db -> prepare('SELECT * FROM Person WHERE id=:p')) {
             $stmt->bindValue(':p', $param);
@@ -254,6 +283,7 @@ switch ($request) {
                 {
                     catchErr($stmt, false);
                 }
+                goback();
         }
         else{
             printErr("Error");
@@ -286,7 +316,7 @@ switch ($request) {
     break;
 
     case "searchP":
-        $param = "{$_GET["p"]}";
+        $param = "%{$_GET["p"]}%";
         if($stmt = $db->prepare('SELECT * FROM Person WHERE (firstName like :firstName OR lastName like :lastName OR phone like :phone)')){
             $stmt->bindValue(':firstName', $param);
             $stmt->bindValue(':lastName', $param);
@@ -295,11 +325,12 @@ switch ($request) {
         }
         else{
             printErr("Error");
-        } 
-        for($i = 0; $i <= count($findInterestId($param)); $i++){
-            $perArr = $findPersonsIdByInterestId($param);
-            result($perArr[i], "Empty");
         }
-    break;
+        $param = $_GET['p']; 
+        $arr = findPersonsIdByInterestId($param,$db);
+        findPersonsById($arr,$db);
 
+        break;
 }
+
+getResult();

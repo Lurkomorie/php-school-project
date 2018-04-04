@@ -5,140 +5,79 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="vendor/bootstrap/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ"
-        crossorigin="anonymous">
-    <script src="vendor/jquery.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
-        crossorigin="anonymous"></script>
-    <script src="vendor/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
-        crossorigin="anonymous"></script>
-    <script src="vendor/bootstrap/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
-        crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="assets/css/index.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" ></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" ></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <title>Home page</title>
 </head>
 
-<body>
-    <div class="homepage">Home page
-    </div>
 
-    <nav class="navbar sticky-top navbar-toggleable-md navbar-inverse bg-inverse myNavbar">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01"
-            aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-            <h1 class="navbar-brand mb-0">Percifali'</h1>
-            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Home
-                        <span class="sr-only">(current)</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-            </ul>
-            <form class="form-inline mx-auto my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="text" placeholder="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
-            <ul class="navbar-nav mr-right mt-2 mt-lg-0">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Log in
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Register</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-    <div class="card-columns">
-        <div class="card text-center">
-            <div class="card-block">
-                <h4 class="card-title">4Card title</h4>
-                <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-                <p class="card-text">
-                    <small class="text-muted">Last updated 3 mins ago</small>
-                </p>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Cras justo odio</li>
-                    <li class="list-group-item">Dapibus ac facilisis in</li>
-                    <li class="list-group-item">Vestibulum at eros</li>
-                </ul>
-            </div>
-        </div>
-        <div class="card text-center">
-            <div class="card-block">
-                <h4 class="card-title">4Card title</h4>
-                <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-                <p class="card-text">
-                    <small class="text-muted">Last updated 3 mins ago</small>
-                </p>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Cras justo odio</li>
-                    <li class="list-group-item">Dapibus ac facilisis in</li>
-                    <li class="list-group-item">Vestibulum at eros</li>
-                </ul>
-            </div>
-        </div>
-        <div class="card text-center">
-            <div class="card-block">
-                <h4 class="card-title">4Card title</h4>
-                <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-                <p class="card-text">
-                    <small class="text-muted">Last updated 3 mins ago</small>
-                </p>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Cras justo odio</li>
-                    <li class="list-group-item">Dapibus ac facilisis in</li>
-                    <li class="list-group-item">Vestibulum at eros</li>
-                </ul>
-            </div>
-        </div>
-        <div class="card text-center">
-            <div class="card-block">
-                <h4 class="card-title">4Card title</h4>
-                <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-                <p class="card-text">
-                    <small class="text-muted">Last updated 3 mins ago</small>
-                </p>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Cras justo odio</li>
-                    <li class="list-group-item">Dapibus ac facilisis in</li>
-                    <li class="list-group-item">Vestibulum at eros</li>
-                </ul>
-            </div>
-        </div>
-        <div class="card text-center">
-            <div class="card-block">
-                <h4 class="card-title">4Card title</h4>
-                <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-                <p class="card-text">
-                    <small class="text-muted">Last updated 3 mins ago</small>
-                </p>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Cras justo odio</li>
-                    <li class="list-group-item">Dapibus ac facilisis in</li>
-                    <li class="list-group-item">Vestibulum at eros</li>
-                </ul>
-            </div>
-        </div>
-        <div class="card text-center">
-            <div class="card-block">
-                <h4 class="card-title">4Card title</h4>
-                <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-                <p class="card-text">
-                    <small class="text-muted">Last updated 3 mins ago</small>
-                </p>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Cras justo odio</li>
-                    <li class="list-group-item">Dapibus ac facilisis in</li>
-                    <li class="list-group-item">Vestibulum at eros</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</body>
+<body class="container">
+<form class="pure-form">
+<div style="font-size:50px">All users:</div>
+<fieldset style="font-size:25px" >
+<input type="text" name="search" placeholder="Search">
+<button type="submit" class="btn">Search</button>
+</fieldset>
+<div id="UserList"> 
 
+    <div id="UserList">
+    <table class="table" style="font-size:25px">
+    <thead>
+    <tr>
+    <th>Id</th>
+    <th>Name</th>
+    <th>Phone</th>
+    <th>Age</th>
+    <th>Active</th>
+    <th>Operations</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+    </tbody>
+    <script>
+    $.getJSON("http://localhost:80/php-school-project/services.php?q=viewAllP", function(){
+    console.log( "Success" );
+    }).done(function(data){
+    var html ="";
+    for (var user_index = 0; user_index < data.length; user_index++) {
+    html += "<tr>";
+    html += "<td>" + data[user_index].id + "</td>";
+    html += "<td>" + data[user_index].firstName + " " + data[user_index].lastName + "</td>";
+    html += "<td>" + data[user_index].phone + "</td>";
+    html += "<td>" + data[user_index].age + "</td>";
+    html += "<td>" + data[user_index].active + "</td>";
+    html += "<td><button class='btn' data-id=\""+data[user_index].id+"\">Edit</button> <button id='delete' class='btn delete' data-id=\""+data[user_index].id+"\">Delete</button></td>"; 
+    html += "</tr>";
+    }
+    $('table tbody').html(html);
+    }).fail(function(){
+    console.log( "Error" );
+    alert("Error");
+    });
+    $(document).on("click", "td button.delete", function(event) {
+    event.preventDefault();
+    var client_id = $(this).attr("data-id");
+    var server_url = "http://localhost:80/php-school-project/services.php?q=deleteP&p=" + client_id;
+    $(this).parents('tr').remove();
+    console.log(client_id);
+    $.ajax(server_url, function(){
+    console.log( "Success" );
+    }).done(function(){
+    });
+    });
+    </script>
+    </table>
+    <div class="pagination" style="font-size: 40px;">
+    <a href="#">&laquo;</a>
+    <a href="#" v-for="page in pages" v-on:click="count()">{{page}}</a>
+    <a href="#">&raquo;</a>
+    </div>
+    </div> 
+</form>
+</body> 
 </html>
