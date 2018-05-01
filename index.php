@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,29 +7,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" type="text/css" href="assets/css/index.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" ></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" ></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="vendor/bootstrap/bootstrap.min.css" crossorigin="anonymous">
+
+    <script src="vendor/jquery.slim.js" ></script>
+    <script src="vendor/jquery.js"></script>
+    <script src="vendor/popper.js" ></script>
+    <script src="vendor/bootstrap/bootstrap.min.js"></script>
+    <script src="vendor/vuejs/vue.js" ></script>
+
     <title>Home page</title>
 </head>
+<body>
+<div id="app">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">MyProj</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+    </div>
+    <div class="form-inline">
+        <input class="form-control mr-sm-2" type="text" placeholder="Search" v-model="keyword"  aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="button" @click="search()">Search</button>
+    </div>
+    <div class="form-inline dropdown">
+
+        <?php
+        session_start();
+        if(isset($_SESSION['login_user'])){
+            echo '
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                ' . $_SESSION['login_user'] . '
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <a class="dropdown-item" href="profile.php">Profile</a>
+                <a class="dropdown-item" href="logout.php">Logout</a>
+            </div>';
+        }
+        else{
+            echo '<a class="nav-link" href="login.php">Login</a>';
+        }
+        ?>
 
 
-<body class="container">
-<form class="pure-form">
-<div style="font-size:50px">All users:</div>
-<fieldset style="font-size:25px" >
-<input type="text" name="search" placeholder="Search">
-<button type="submit" class="btn">Search</button>
-</fieldset>
-<div id="UserList"> 
 
-    <div id="UserList">
-    <table class="table" style="font-size:25px">
+
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <button type="button" class="close" aria-label="Close" @click="getBack()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+
+    <table class="table">
     <thead>
     <tr>
-    <th>Id</th>
     <th>Name</th>
     <th>Phone</th>
     <th>Age</th>
@@ -37,47 +76,44 @@
     </tr>
     </thead>
     <tbody>
-    
+    <tr v-for="(person,index) in persons">
+        <td >{{person.firstName}} {{person.lastName}}</td>
+        <td>{{person.phone}}</td>
+        <td>{{person.age}}</td>
+        <td>{{person.active}}</td>
+        <td>
+            <button type="button" class="btn btn-primary" @click="removeRow(person.id,index)">delete</button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" @click="viewPerson(index)">View </button>
+                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">{{firstName}} {{lastName}}, {{age}}</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Phone: {{phone}}</p>
+                                <p>Active: {{active}}</p>
+                            </div>
+                            <div class="modal-body">
+                                <h5>Interests: </h5>
+                                <p v-for="interest in interests">{{interest.description}}</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+        </td>
+    </tr>
     </tbody>
-    <script>
-    $.getJSON("http://localhost:80/php-school-project/services.php?q=viewAllP", function(){
-    console.log( "Success" );
-    }).done(function(data){
-    var html ="";
-    for (var user_index = 0; user_index < data.length; user_index++) {
-    html += "<tr>";
-    html += "<td>" + data[user_index].id + "</td>";
-    html += "<td>" + data[user_index].firstName + " " + data[user_index].lastName + "</td>";
-    html += "<td>" + data[user_index].phone + "</td>";
-    html += "<td>" + data[user_index].age + "</td>";
-    html += "<td>" + data[user_index].active + "</td>";
-    html += "<td><button class='btn' data-id=\""+data[user_index].id+"\">Edit</button> <button id='delete' class='btn delete' data-id=\""+data[user_index].id+"\">Delete</button></td>"; 
-    html += "</tr>";
-    }
-    $('table tbody').html(html);
-    }).fail(function(){
-    console.log( "Error" );
-    alert("Error");
-    });
-    $(document).on("click", "td button.delete", function(event) {
-    event.preventDefault();
-    var client_id = $(this).attr("data-id");
-    var server_url = "http://localhost:80/php-school-project/services.php?q=deleteP&p=" + client_id;
-    $(this).parents('tr').remove();
-    console.log(client_id);
-    $.ajax(server_url, function(){
-    console.log( "Success" );
-    }).done(function(){
-    });
-    });
-    </script>
     </table>
-    <div class="pagination" style="font-size: 40px;">
-    <a href="#">&laquo;</a>
-    <a href="#" v-for="page in pages" v-on:click="count()">{{page}}</a>
-    <a href="#">&raquo;</a>
     </div>
-    </div> 
-</form>
+<script src="assets/js/index.js"></script>
+</div>
 </body> 
 </html>

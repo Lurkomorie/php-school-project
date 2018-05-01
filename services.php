@@ -140,7 +140,7 @@ function findPersonsById($arr,$db){
 }
 }
 
-function countRowsInTable($tableName){
+/*function countRowsInTable($tableName){
     if($stmt = $db -> prepare('SELECT COUNT(*) FROM :p')) {
         $stmt->bindValue(':p', $tableName);
         $result = $stmt->execute();
@@ -151,7 +151,7 @@ function countRowsInTable($tableName){
     else{
         printErr("Error");
     }
-}
+}*/
 
 
 
@@ -229,8 +229,7 @@ switch ($request) {
 
 
     //works
-    case "v
-    iewSingleP": 
+    case "viewSingleP":
         $param = "{$_GET["p"]}";
         if($stmt = $db -> prepare('SELECT * FROM Person WHERE id=:p')) {
             $stmt->bindValue(':p', $param);
@@ -328,8 +327,20 @@ switch ($request) {
         }
         $param = $_GET['p']; 
         $arr = findPersonsIdByInterestId($param,$db);
-        findPersonsById($arr,$db);
+        @findPersonsById($arr,$db);
 
+        break;
+
+    case "getUserInterest":
+        //works
+        $param = "{$_GET["p"]}";
+        if($stmt = $db -> prepare('SELECT Interest.description FROM Interest inner join Person_Interests on Interest.id = Person_Interests.interestId WHERE Person_Interests.personId = :p')) {
+            $stmt->bindValue(':p', $param);
+            catchErr($stmt, true);
+        }
+        else{
+            printErr("Error");
+        }
         break;
 }
 

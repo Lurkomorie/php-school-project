@@ -1,52 +1,83 @@
+<?php
+include('lohin.php'); // Includes Login Script
+
+if(isset($_SESSION['login_user'])){
+    header("location: profile.php");
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <title>Free Bootstrap 4 Login/Register Forms By Wired Dots</title>
-        <meta name="description" content="Love Authority." />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
-        <link rel="stylesheet" href="assets/css/login.css" />
-    </head>
-    <body>
-        <!--hero section-->
-        <section class="hero">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-6 col-sm-8 mx-auto">
-                        <div class="card border-none">
-                            <div class="card-body">
-                                <p class="mt-4 text-white lead text-center">
-                                    Sign in to access your Percifali' account
-                                </p>
-                                <div class="mt-4">
-                                    <form>
-                                        <div class="form-group">
-                                            <input type="email" class="form-control" id="email" value="" placeholder="Enter email address">
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="password" class="form-control" id="password" value="" placeholder="Enter password">
-                                        </div>
-                                        <label class="custom-control custom-checkbox mt-2">
-                                            <input type="checkbox" class="custom-control-input">
-                                            <span class="custom-control-indicator"></span>
-                                            <span class="custom-control-description text-white">Keep me logged in</span>
-                                        </label>
-                                        <button type="submit" class="btn btn-primary float-right">Sign in</button>
-                                    </form>
-                                    <div class="clearfix"></div>
-                                </div>
-                                <p class="text-center">
-                                    Don't have an account yet? <a href="register.html">Sign Up Now</a>
-                                </p>
-                            </div>
-                        </div>
+<head>
+    <!-- Standard Meta -->
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <!-- Site Properties -->
+    <title>Login</title>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+    <link rel="stylesheet" href="vendor/bootstrap/bootstrap.min.css" crossorigin="anonymous">
+
+    <script src="vendor/jquery.slim.js" ></script>
+    <script src="vendor/jquery.js"></script>
+    <script src="vendor/popper.js" ></script>
+    <script src="vendor/bootstrap/bootstrap.min.js"></script>
+    <script src="vendor/vuejs/vue.js" ></script>
+</head>
+<body>
+<div class="container mt-5">
+    <form class="form-horizontal" role="form" method="post" action="">
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <h2>Please Login</h2>
+                <hr>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <div class="form-group has-danger">
+                    <label class="sr-only" for="username">Username</label>
+                    <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                        <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                        <input type="text" name="username" class="form-control" id="username"
+                               placeholder="Enter your username" required autofocus>
                     </div>
-                    <div class="clearfix"></div>
                 </div>
             </div>
-        </section>
-
-    </body>
+            <div class="col-md-3">
+                <div class="form-control-feedback">
+                        <span class="text-danger align-middle">
+                             <?php echo $error; ?>
+                        </span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="sr-only" for="password">Password</label>
+                    <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                        <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-key"></i></div>
+                        <input type="password" name="password" class="form-control" id="password"
+                               placeholder="Password" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="padding-top: 1rem">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <input name="submit" type="submit" class="btn btn-success" value="Login">
+            </div>
+        </div>
+    </form>
+</div>
+</body>
 </html>
